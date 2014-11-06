@@ -39,6 +39,10 @@ type IoCountStore struct {
 }
 
 func NewIoCountStore() *IoCountStore {
+	hostname, err := os.Hostname()
+	if err != nil {
+		hostname = "localhost"
+	}
 	store := &IoCountStore{
 		getattr:     metrics.NewGauge(),
 		setattr:     metrics.NewGauge(),
@@ -62,27 +66,27 @@ func NewIoCountStore() *IoCountStore {
 		pathconf:    metrics.NewGauge(),
 		commit:      metrics.NewGauge(),
 	}
-	metrics.Register("bart.glbrc.org.nfs.io.getattr", store.getattr)
-	metrics.Register("bart.glbrc.org.nfs.io.setattr", store.setattr)
-	metrics.Register("bart.glbrc.org.nfs.io.lookup", store.lookup)
-	metrics.Register("bart.glbrc.org.nfs.io.access", store.access)
-	metrics.Register("bart.glbrc.org.nfs.io.readlink", store.readlink)
-	metrics.Register("bart.glbrc.org.nfs.io.read", store.read)
-	metrics.Register("bart.glbrc.org.nfs.io.write", store.write)
-	metrics.Register("bart.glbrc.org.nfs.io.create", store.create)
-	metrics.Register("bart.glbrc.org.nfs.io.mkdir", store.mkdir)
-	metrics.Register("bart.glbrc.org.nfs.io.symlink", store.symlink)
-	metrics.Register("bart.glbrc.org.nfs.io.mknod", store.mknod)
-	metrics.Register("bart.glbrc.org.nfs.io.remove", store.remove)
-	metrics.Register("bart.glbrc.org.nfs.io.rmdir", store.rmdir)
-	metrics.Register("bart.glbrc.org.nfs.io.rename", store.rename)
-	metrics.Register("bart.glbrc.org.nfs.io.link", store.link)
-	metrics.Register("bart.glbrc.org.nfs.io.readdir", store.readdir)
-	metrics.Register("bart.glbrc.org.nfs.io.readdirplus", store.readdirplus)
-	metrics.Register("bart.glbrc.org.nfs.io.fsstat", store.fsstat)
-	metrics.Register("bart.glbrc.org.nfs.io.fsinfo", store.fsinfo)
-	metrics.Register("bart.glbrc.org.nfs.io.pathconf", store.pathconf)
-	metrics.Register("bart.glbrc.org.nfs.io.commit", store.commit)
+	metrics.Register(hostname + ".nfs.io.getattr", store.getattr)
+	metrics.Register(hostname + ".nfs.io.setattr", store.setattr)
+	metrics.Register(hostname + ".nfs.io.lookup", store.lookup)
+	metrics.Register(hostname + ".nfs.io.access", store.access)
+	metrics.Register(hostname + ".nfs.io.readlink", store.readlink)
+	metrics.Register(hostname + ".nfs.io.read", store.read)
+	metrics.Register(hostname + ".nfs.io.write", store.write)
+	metrics.Register(hostname + ".nfs.io.create", store.create)
+	metrics.Register(hostname + ".nfs.io.mkdir", store.mkdir)
+	metrics.Register(hostname + ".nfs.io.symlink", store.symlink)
+	metrics.Register(hostname + ".nfs.io.mknod", store.mknod)
+	metrics.Register(hostname + ".nfs.io.remove", store.remove)
+	metrics.Register(hostname + ".nfs.io.rmdir", store.rmdir)
+	metrics.Register(hostname + ".nfs.io.rename", store.rename)
+	metrics.Register(hostname + ".nfs.io.link", store.link)
+	metrics.Register(hostname + ".nfs.io.readdir", store.readdir)
+	metrics.Register(hostname + ".nfs.io.readdirplus", store.readdirplus)
+	metrics.Register(hostname + ".nfs.io.fsstat", store.fsstat)
+	metrics.Register(hostname + ".nfs.io.fsinfo", store.fsinfo)
+	metrics.Register(hostname + ".nfs.io.pathconf", store.pathconf)
+	metrics.Register(hostname + ".nfs.io.commit", store.commit)
 	return store
 }
 
@@ -150,7 +154,7 @@ func readAndUpdate(opStore *IoCountStore, ready chan bool) {
 		Password: "root",
 	})
 	elapsed := time.Since(start)
-	fmt.Fprintf(os.Stdout, "Read and Update took d%", int64(elapsed))
+	fmt.Fprintf(os.Stdout, "Read and Update took %d", int64(elapsed))
 	ready <- true
 }
 
